@@ -49,7 +49,7 @@ double rng(){
 // COMMANDLINE OPTIONS //
 #include "IO/cfile.c"
 
-void Main() {
+int main(int argc, char* argv[]) {
     
     // SET COMMANDLINE ARGUMENTS //
     Konfig CommandlineArguments(argc,argv);
@@ -152,7 +152,7 @@ void Main() {
 //    }
     
     // EXIT //
-    exit(1);
+    return 0;
     
     
 }
