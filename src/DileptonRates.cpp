@@ -190,4 +190,60 @@ namespace DileptonRates{
         
     }
     
+    void SampledNdqTdQdy(double Q,double qT,double TauMin,double TauMax,double EtaQ,double dNchdEta,double Area,double &dN,double &dNPreEq,double &dNHydro,double eta_over_s){
+
+
+        // SET JACOBIAN FOR MONTE-CARLO INTEGRATION //
+        double Jacobian=1.0;
+
+        // SAMPLE EVOLUTION TIME //
+        double Tau=TauMin+(TauMax-TauMin)*rng();
+        Jacobian*=Tau*(TauMax-TauMin)*Area/(M_HBARC*M_HBARC*M_HBARC*M_HBARC);
+
+        double T,wTilde,e,pL,eQOvereG;
+        GetValues(dNchdEta,Area,eta_over_s,Tau,T,wTilde,e,pL,eQOvereG);
+
+        // CALCULATE DILEPTON PRODUCTION dN/dydQd2qT FOR ALL BINS //
+
+        // SAMPLE INTEGRATION POINT //
+        double EtaMin=-8+EtaQ;
+        double EtaMax=8+EtaQ;
+        double EtaX=EtaMin+(EtaMax-EtaMin)*rng();
+        double PhiQ=2.0*M_PI*rng();
+
+        double QSqr=Q*Q;
+
+        // ENERGY AND MOMENTUM OF DILEPTON PAIR //
+        double qZ=std::sqrt(QSqr+qT*qT)*sinh(EtaQ);
+        double qAbs=std::sqrt(qT*qT+(QSqr+qT*qT)*sinh(EtaQ)*sinh(EtaQ));
+        double q0=std::sqrt(QSqr+qAbs*qAbs);
+
+        // PSEUDO-RAPIDITY OF DILEPTON PAIR //
+        double yQ=atanh(qZ/qAbs);
+
+
+        // JACOBIAN  -- d^4Q=QdQ dy d^2qT //
+        Jacobian*=(EtaMax-EtaMin)*Q*qT*2*M_PI;
+
+
+        // CALCULATE DILEPTON PRODUCTION //
+        double Xi,Teff,qSupp;
+        PhaseSpaceDistribution::GetPhaseSpaceDistributionParameters(e,pL,eQOvereG,Xi,Teff,qSupp);
+        double PreFactor=alphaEM*alphaEM/(6.0*M_PI*M_PI*M_PI*QSqr)*(1.0+2.0*mllSqr/QSqr)*sqrt(1.0-4.0*mllSqr/QSqr)*qFSqrSum;
+        double dNlld4xd4Q=PreFactor*DileptonRates::SampleTracePi(q0,qT,PhiQ,yQ,EtaX,Xi,Teff,qSupp);
+
+        double dNSamp=Jacobian*dNlld4xd4Q;
+        
+        // DISTINGUSIH BETWEEN PRE-EQUILIBRIUM AND HYDRO //
+        dN=dNSamp;
+        if(wTilde<1.0){
+                dNPreEq=dNSamp;
+                dNHydro=0;
+        }else{
+                dNHydro=dNSamp;
+                dNPreEq=0;
+        }
+
+    }
+    
 }
