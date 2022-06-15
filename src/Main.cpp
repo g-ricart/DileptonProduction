@@ -50,58 +50,58 @@ double rng(){
 #include "IO/cfile.c"
 
 int main(int argc, char* argv[]) {
-    
+
     // SET COMMANDLINE ARGUMENTS //
     Konfig CommandlineArguments(argc,argv);
-    
+
     // COLLISION PARAMETERS //
     double EtaOverS=0.32; double dNchdEta=1900; double Area=110;
-    
+
     CommandlineArguments.Getval("etas",EtaOverS);
     CommandlineArguments.Getval("Nch",dNchdEta);
     CommandlineArguments.Getval("area",Area);
     CommandlineArguments.Getval("Q",QUARK_SUPPRESSION);
-    
+
     std::cerr << "#CALCULATING DILEPTON PRODUCTION FOR dNchdEta=" << dNchdEta << " Area=" << Area << " fm^2 AND Eta/s=" << EtaOverS << " QUARK SUPPRESION " << QUARK_SUPPRESSION << std::endl;
-    
-    
+
+
     // DILEPTON PARAMTERS //
     double QMin=1.0; double QMax=5.0;
 
     CommandlineArguments.Getval("QMin",QMin);
     CommandlineArguments.Getval("QMax",QMax);
-    
+
     double qTMin=0.001; double qTMax=10.0; double TauMin=0.0; double TauMax=40.0;
-    
+
     CommandlineArguments.Getval("qTMin",qTMin);
     CommandlineArguments.Getval("qTMax",qTMax);
     CommandlineArguments.Getval("TauMin",TauMin);
     CommandlineArguments.Getval("TauMax",TauMax);
-    
+
     std::cerr << "#KINEMATIC CUTS ARE qT=" << qTMin << " - " << qTMax << " AND  tau=" << TauMin << "-" << TauMax << " fm" << std::endl;
-    
-    
+
+
     // MONTE CARLO SAMPLING //
     int NSamples=5120000;
     CommandlineArguments.Getval("NSamples",NSamples);
-    
+
     // SEED RANDOM NUMBER GENERATOR //
     srand48(time(0));
-    
+
     // SETUP INTERPOLATORS FOR HYDRO ATTRACTORS //
     HydroAttractor::Setup();
-    
+
     // CALCULATE DILEPTON PRODUCTION -- dN/dQdyQ //
     int NQ=15; double yQ=2.0;
-    
+
     CommandlineArguments.Getval("NQ",NQ);
     CommandlineArguments.Getval("yQ",yQ);
-    
+
     std::cerr << "#CALCULATING FOR Q=" << QMin << " - " << QMax << " IN " << NQ << " BINS AT yQ=" <<  yQ  << " WITH " << NSamples << " SAMPLES PER BIN" << std::endl;
 
     // WRITE HEADER //
     std::cout << "#1-Q [GeV] 2--dN/dQdY [GeV-1] 3--dN_{PreEq}/dQdY [GeV-1] 3--dN_{Hydro}/dQdY [GeV-1]" << std::endl;
-    
+
     for(int iQ=0;iQ<NQ;iQ++){
 
         double Q=QMin+iQ*(QMax-QMin)/double(NQ-1);
@@ -110,9 +110,9 @@ int main(int argc, char* argv[]) {
         double dNlldQdY=0.0;
         double dNlldQdYPreEq=0.0;
         double dNlldQdYHydro=0.0;
-        
+
         for(int i=0;i<NSamples;i++){
-            
+
             double dN,dNPreEq,dNHydro;
             DileptonRates::SampledNdQdy(Q*Q,qTMin,qTMax,TauMin,TauMax,yQ,dNchdEta,Area,EtaOverS,dN,dNPreEq,dNHydro);
             dNlldQdY+=dN; dNlldQdYPreEq+=dNPreEq; dNlldQdYHydro+=dNHydro;
@@ -126,7 +126,7 @@ int main(int argc, char* argv[]) {
         std::cout << Q << " " << dNlldQdY << " " << dNlldQdYPreEq << " " << dNlldQdYHydro << std::endl;
 
     }
-    
+
 //    // CALCULATE DILEPTON PRODUCTION -- dN/dy //
 //    double yMin=-2.0; double yMax=+2.0; int NY=15;
 //
@@ -150,9 +150,9 @@ int main(int argc, char* argv[]) {
 //        std::cout << yQ << " " << dNlldY << std::endl;
 //
 //    }
-    
+
     // EXIT //
     return 0;
-    
-    
+
+
 }

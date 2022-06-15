@@ -27,7 +27,7 @@ class Konfitem
   Konfitem(char*,double);
   Konfitem(char*,int);
   ~Konfitem();
-   
+
   Konfitem* Getnext() const {return next;}
   Konfitem* Getlast();
   void Setnext(Konfitem *kov) { next=kov; }
@@ -38,7 +38,7 @@ class Konfitem
   void Setval(double);
   char* Getval() {return ertek;}
   void print();
-  Konfitem* Whereis(const char *); 
+  Konfitem* Whereis(const char *);
   void save(ofstream& fout);
 
  private:
@@ -55,7 +55,7 @@ class Konfig
   Konfig(char*,double);
   Konfig(char*,int);
   Konfig(char *);
-  Konfig(int argc,char* argv[]);  
+  Konfig(int argc,char* argv[]);
   //  Konfig(char*);
   ~Konfig();
 
@@ -81,7 +81,7 @@ class Konfig
  private:
  Konfitem* first;
  Konfitem* last;
- void Newitem(char*,char*); 
+ void Newitem(char*,char*);
  void Newitem(char*,double);
  void Newitem(char*,int);
  char tempb[K_BHOSSZ];

@@ -48,11 +48,11 @@ Konfig::Konfig(int argc,char * argv[])
   int i,j;
 
   for(i=1;i<argc;i++)
-    if (argv[i][0]=='-') 
-      { for(j=0; (j<K_BHOSSZ) && (argv[i][j+1]!=0 );j++) 
+    if (argv[i][0]=='-')
+      { for(j=0; (j<K_BHOSSZ) && (argv[i][j+1]!=0 );j++)
         	buffer[j]=argv[i][j+1];
         buffer[j]=0;
-	if ((i+1)<argc) Set(buffer,argv[i+1]);      
+	if ((i+1)<argc) Set(buffer,argv[i+1]);
         	else Set(buffer,buffer);
       }
 }
@@ -63,32 +63,32 @@ void Konfig::read_file(char *filenev)
   char buffer[K_BHOSSZ],nev[K_BHOSSZ],ertek[K_BHOSSZ];
 
   cerr << "Reading configfile: " << filenev << endl;
-  
+
    int error=0;
   int sor=0;
   int i,j;
 
- 
+
      do { fin.getline(buffer,K_BHOSSZ); sor++;
      i=0;
      while  ((buffer[i]==' ' || buffer[i]=='\t') && i<K_BHOSSZ) i++;
-     if (buffer[i]=='#' || buffer[i]==0) continue; 
+     if (buffer[i]=='#' || buffer[i]==0) continue;
 
 
  for(i=0;i<K_BHOSSZ && buffer[i]!= '=' ;i++) ;
- if (i == K_BHOSSZ) { 
-   error=1; cerr << "Error in params file line " << sor 
+ if (i == K_BHOSSZ) {
+   error=1; cerr << "Error in params file line " << sor
                << ": No equality sign"<< endl; break; }
 
          for(j=0;j<i;j++) {nev[j]=buffer[j];} nev[i]= '\0';
 
   for(j=i+1;buffer[j]!='\0';j++) ertek[j-i-1]=buffer[j];
-  ertek[j-i-1]=0;   
+  ertek[j-i-1]=0;
 
   //  cerr << nev << " " << ertek << endl;
 
   Set(nev,ertek);
- 
+
     }   while ( !fin.eof() && error == 0 );
 
 
@@ -125,7 +125,7 @@ Konfitem* Konfig::Getlast_slow()
 }
 
 void Konfig::Newitem(char* nev,char* ert)
-{ 
+{
  last->Setnext(new Konfitem(nev,ert));
  last=last->Getnext();
 }
@@ -137,7 +137,7 @@ void Konfig::Newitem(char* nev,double ert)
 }
 
 void Konfig::Newitem(char* nev,int ert)
-{ 
+{
  last->Setnext(new Konfitem(nev,ert));
  last=last->Getnext();
 }
@@ -148,34 +148,34 @@ void Konfig::printall()
 }
 
 void Konfig::Set(char* nev,char* ertek)
-{ Konfitem * mutato=exists(nev); 
- if (mutato==NULL) 
-    {  
+{ Konfitem * mutato=exists(nev);
+ if (mutato==NULL)
+    {
     strncpy(tempb,nev,K_BHOSSZ);
     strip(tempb);
-    Newitem(tempb,ertek); return; 
+    Newitem(tempb,ertek); return;
     }
  mutato->Setval(ertek);
 }
 
 void Konfig::Set(char* nev,double ertek)
-{ Konfitem * mutato=exists(nev); 
- if (mutato==NULL) 
- {  
+{ Konfitem * mutato=exists(nev);
+ if (mutato==NULL)
+ {
     strncpy(tempb,nev,K_BHOSSZ);
     strip(tempb);
-    Newitem(tempb,ertek); return; 
+    Newitem(tempb,ertek); return;
     }
  mutato->Setval(ertek);
 }
 
 void Konfig::Set(char* nev,int ertek)
-{ Konfitem * mutato=exists(nev); 
- if (mutato==NULL) 
-   {  
+{ Konfitem * mutato=exists(nev);
+ if (mutato==NULL)
+   {
     strncpy(tempb,nev,K_BHOSSZ);
     strip(tempb);
-    Newitem(tempb,ertek); return; 
+    Newitem(tempb,ertek); return;
     }
  mutato->Setval(ertek);
 }
@@ -187,7 +187,7 @@ int Konfig::Exists(const char* nev)
 }
 
 
-char* Konfig::Getval(const char* nev) 
+char* Konfig::Getval(const char* nev)
 { Konfitem* ezaz=exists(nev);
  if (ezaz==NULL) return NULL;
  return ezaz->Getval();
@@ -230,7 +230,7 @@ int  Konfig::Getval(const char *nev,int& ide) const
 
 Konfitem* Konfig::exists(const char* ez) const
 { char nev[K_BHOSSZ];
- 
+
  strncpy(nev,ez,K_BHOSSZ);
  strip(nev);
  return first->Whereis(nev);
@@ -264,21 +264,21 @@ Konfitem::Konfitem()
 }
 
 Konfitem::Konfitem(const char* nev,const char* ert)
-{  
+{
   Setname(nev);
   Setval(ert);
   next=NULL;
 }
 
 Konfitem::Konfitem(char* nev,double ert)
-{  
+{
   Setname(nev);
   Setval(ert);
   next=NULL;
 }
 
 Konfitem::Konfitem(char* nev,int ert)
-{  
+{
   Setname(nev);
   Setval(ert);
   next=NULL;
@@ -290,24 +290,24 @@ Konfitem::~Konfitem()
 }
 
 void Konfitem::Setname(const char* erre)
-{ 
+{
   strncpy(nevem,erre,K_BHOSSZ);
   nevem[K_BHOSSZ-1]=0;
 }
 
 void Konfitem::Setval(const char* erre)
-{ 
+{
   strncpy(ertek,erre,K_BHOSSZ);
   ertek[K_BHOSSZ-1]=0;
 }
 
 void Konfitem::Setval(int szam)
-{ 
+{
   snprintf(ertek,K_BHOSSZ,"%d",szam);
 }
 
 void Konfitem::Setval(double szam)
-{ 
+{
   snprintf(ertek,K_BHOSSZ,"%g",szam);
 }
 
@@ -321,8 +321,8 @@ Konfitem* Konfitem::Getlast()
 char* strip(char * ezt,int max)
 { int i=0,k=0;
  while ((ezt[i]==' ' || ezt[i]=='\t') && i< max) i++;
- for( ;i<max && ezt[i]!=0 && ezt[i]!=' ' ;i++,k++) 
-          { ezt[k]=ezt[i]; } 
+ for( ;i<max && ezt[i]!=0 && ezt[i]!=' ' ;i++,k++)
+          { ezt[k]=ezt[i]; }
  ezt[k]=0;
  return ezt;
 }
@@ -330,10 +330,10 @@ char* strip(char * ezt,int max)
 // kiszedi a sztringbol a spacekat
 char* spacekill(char *ezt,int max)
 { int i=0,k=0;
- 
+
  do {
  while (ezt[i]==' ') i++;
- for( ;i<max && ezt[i]!=0 && ezt[i]!=' ' ;i++,k++)  
+ for( ;i<max && ezt[i]!=0 && ezt[i]!=' ' ;i++,k++)
     { ezt[k]=ezt[i]; }
  } while (i<max && ezt[i]!=0);
  ezt[k]=0;
