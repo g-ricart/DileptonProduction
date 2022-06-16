@@ -127,29 +127,33 @@ int main(int argc, char* argv[]) {
 
     }
 
-//    // CALCULATE DILEPTON PRODUCTION -- dN/dy //
-//    double yMin=-2.0; double yMax=+2.0; int NY=15;
-//
-//    CommandlineArguments.Getval("yMin",QMin);
-//    CommandlineArguments.Getval("yMax",QMax);
-//    CommandlineArguments.Getval("NY",NY);
-//
-//    std::cerr << "#CALCULATING FOR y=" << yMin << " - " << yMax << " IN " << NY << " BINS WITH Q=" <<  QMin  << " - " << QMax << " WITH " << NSamples << " SAMPLES PER BIN" << std::endl;
-//
-//    for(int iY=0;iY<NY;iY++){
-//
-//        double yQ=yMin+iY*(yMax-yMin)/double(NY-1);
-//
-//        double dNlldY=0.0;
-//
-//        for(int i=0;i<NSamples;i++){
-//            dNlldY+=DileptonRates::SampledNdy(QMin,QMax,qTMin,qTMax,TauMin,TauMax,yQ,dNchdEta,Area,EtaOverS);
-//        }
-//        dNlldY/=double(NSamples);
-//
-//        std::cout << yQ << " " << dNlldY << std::endl;
-//
-//    }
+   // CALCULATE DILEPTON PRODUCTION -- dN/dy //
+   // double yMin=+2.0; double yMax=+5.0; int NY=15;
+   //
+   // CommandlineArguments.Getval("yMin",QMin);
+   // CommandlineArguments.Getval("yMax",QMax);
+   // CommandlineArguments.Getval("NY",NY);
+   //
+   // std::cerr << "#CALCULATING FOR y=" << yMin << " - " << yMax << " IN " << NY << " BINS WITH Q=" <<  QMin  << " - " << QMax << " WITH " << NSamples << " SAMPLES PER BIN" << std::endl;
+   //
+   // for(int iY=0;iY<NY;iY++){
+   //
+   //     double yQ=yMin+iY*(yMax-yMin)/double(NY-1);
+   //
+   //     double dNlldY=0.0;
+   //     // double dNlldYPreEq=0.0;
+   //     // double dNlldYHydro=0.0;
+   //
+   //     for(int i=0;i<NSamples;i++){
+   //         double dN,dNPreEq,dNHydro;
+   //         DileptonRates::SampledNdy(QMin,QMax,qTMin,qTMax,TauMin,TauMax,yQ,dNchdEta,Area,EtaOverS,dN,dNPreEq,dNHydro);
+   //         dNlldY+=dN; // dNlldYPreEq+=dNPreEq; dNlldYHydro+=dNHydro;
+   //     }
+   //     dNlldY/=double(NSamples);
+   //
+   //     std::cout << yQ << " " << dNlldY << std::endl;
+   //
+   // }
 
     // EXIT //
     return 0;
